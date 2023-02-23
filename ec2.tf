@@ -39,9 +39,18 @@ resource "aws_security_group" "application" {
   }
 }
 
+data "aws_ami" "latest_ami"{
+  filter {
+    name = "name"
+    values = [ "csye6225_*" ]
+  }
+  most_recent = true
+}
+
+
 
 resource "aws_instance" "testEc2" {
-  ami           = "ami-0d3473eeaaa09830c"  # ID of the AMI to use
+  ami           = data.aws_ami.latest_ami.id
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnets.1.id
   vpc_security_group_ids = [aws_security_group.application.id]
@@ -54,6 +63,6 @@ resource "aws_instance" "testEc2" {
   }
 
   tags = {
-    Name = "testAgain-instance"
+    Name = "A4_ec2"
   }
 }
