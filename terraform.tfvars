@@ -1,4 +1,4 @@
-name = "Assignment3-dev"
+name = "Assignment5"
 profile = "dev"
 region = "us-east-1"
 cidr = "10.0.0.0/16"
