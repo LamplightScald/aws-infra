@@ -1,5 +1,5 @@
 name = "Assignment5"
-profile = "dev"
+profile = "demo"
 region = "us-east-1"
 cidr = "10.0.0.0/16"
 azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
