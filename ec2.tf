@@ -3,41 +3,41 @@ resource "aws_security_group" "application" {
   vpc_id      = aws_vpc.dev.id
 
   ingress {
-    from_port = 0
-    to_port   = 65535
-    protocol  = "tcp"
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-    ingress {
     from_port   = 0
-    to_port     = 65535
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
     security_groups = ["${aws_security_group.database.id}"]
   }
   tags = {
@@ -45,10 +45,10 @@ resource "aws_security_group" "application" {
   }
 }
 
-data "aws_ami" "latest_ami"{
+data "aws_ami" "latest_ami" {
   filter {
-    name = "name"
-    values = [ "csye6225_*" ]
+    name   = "name"
+    values = ["csye6225_*"]
   }
   most_recent = true
 }
@@ -56,13 +56,13 @@ data "aws_ami" "latest_ami"{
 
 
 resource "aws_instance" "testEc2" {
-  ami           = data.aws_ami.latest_ami.id
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public_subnets.1.id
-  vpc_security_group_ids = [aws_security_group.application.id]
+  ami                         = data.aws_ami.latest_ami.id
+  instance_type               = "t2.micro"
+  subnet_id                   = aws_subnet.public_subnets.1.id
+  vpc_security_group_ids      = [aws_security_group.application.id]
   associate_public_ip_address = true
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
-  
+  iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
+
   user_data = <<EOF
     #!/bin/bash
     cd /home/ec2-user/webapp
