@@ -3,8 +3,8 @@ resource "random_id" "bucket_name" {
 }
 
 resource "aws_s3_bucket" "new_bucket" {
-  bucket = "${lower("tf-${random_id.bucket_name.hex}")}"
-  acl    = "private"
+  bucket        = lower("tf-${random_id.bucket_name.hex}")
+  acl           = "private"
   force_destroy = true
 
   server_side_encryption_configuration {
@@ -39,26 +39,26 @@ resource "aws_iam_policy" "WebAppS3" {
   description = "IAM S3 policy"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:GetObjectVersion",
-                "s3:DeleteObject",
-                "s3:DeleteObjectVersion",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:s3:::${aws_s3_bucket.new_bucket.bucket}",
-                "arn:aws:s3:::${aws_s3_bucket.new_bucket.bucket}/*"
-            ]
-        }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:GetObjectVersion",
+          "s3:DeleteObject",
+          "s3:DeleteObjectVersion",
+          "s3:ListBucket",
+          "s3:ListBucketMultipartUploads"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.new_bucket.bucket}",
+          "arn:aws:s3:::${aws_s3_bucket.new_bucket.bucket}/*"
+        ]
+      }
     ]
-})
+  })
 }
 
 # create IAM role
@@ -87,6 +87,6 @@ resource "aws_iam_role_policy_attachment" "EC2-CSYE6225" {
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
-        name = "ec2_profile"
-        role = aws_iam_role.EC2-CSYE6225.name
+  name = "ec2_profile"
+  role = aws_iam_role.EC2-CSYE6225.name
 }
