@@ -7,24 +7,24 @@ resource "aws_security_group" "database" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-    ingress {
-    from_port = 0
-    to_port   = 65535
-    protocol  = "tcp"
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 resource "aws_security_group_rule" "mysql_ingress" {
-  type        = "ingress"
-  from_port   = 3306
-  to_port     = 3306
-  protocol    = "tcp"
-  security_group_id = aws_security_group.database.id
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.database.id
   source_security_group_id = aws_security_group.application.id
 }
 resource "aws_db_subnet_group" "rds_subnet" {
-  name        = "rds_subnet"
+  name = "rds_subnet"
 
   subnet_ids = [
     aws_subnet.private_subnets.0.id,
@@ -47,7 +47,7 @@ resource "aws_db_instance" "rds" {
   parameter_group_name   = aws_db_parameter_group.db_parm.name
   vpc_security_group_ids = [aws_security_group.database.id]
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.name
-  multi_az = false
+  multi_az               = false
   tags = {
     Name = "my-rds-instance"
   }
