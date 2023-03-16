@@ -1,6 +1,7 @@
 resource "aws_security_group" "database" {
   name_prefix = "database"
   vpc_id      = aws_vpc.dev.id
+  
   # ingress {
   #   from_port   = 0
   #   to_port     = 0
