@@ -69,15 +69,21 @@ resource "aws_instance" "testEc2" {
     echo "DB_HOST=${aws_db_instance.rds.address}" >> .env
     echo "S3_BUCKET_NAME=${aws_s3_bucket.new_bucket.bucket}" >> .env
     mkdir /product_image_uploads
-    sudo chmod -R 777 /home/ec2-user/webapp/product_image_uploads
+    sudo chmod 777 -R /home/ec2-user/webapp/product_image_uploads
+    sudo chmod 777 -R /var/log
+
+    sudo cp ./cloudwatch-config.json /opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-config.json
+    sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-config.json -s
+
     NODE_ENV=.env node app.js
+
     sudo systemctl daemon-reload
-    sudo systemctl start setup_systemd
+    sudo systemctl restart setup_systemd
     sudo systemctl status setup_systemd
     sudo systemctl enable setup_systemd
   EOF
 
-
+# sudo kill $(sudo lsof -t -i :3000)
   ebs_block_device {
     device_name = "/dev/xvda"
     volume_type = "gp2"
