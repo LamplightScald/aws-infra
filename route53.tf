@@ -18,6 +18,10 @@ resource "aws_route53_record" "prod_record" {
   zone_id = "Z01916091JTI2BDZS4QGR"
   name    = "prod.lamplight1.me"
   type    = "A"
-  ttl     = "60"
-  records = [aws_instance.testEc2.public_ip]
+  # ttl     = 60
+  alias {
+    name                   = aws_lb.loadBalancer.dns_name
+    zone_id                = aws_lb.loadBalancer.zone_id
+    evaluate_target_health = true
+  }
 }
