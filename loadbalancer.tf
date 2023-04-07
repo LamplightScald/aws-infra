@@ -31,6 +31,7 @@ resource "aws_launch_configuration" "autoLauchConfig" {
   associate_public_ip_address = true
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.application.id]
+    iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   user_data       = <<EOF
     #!/bin/bash
     cd /home/ec2-user/webapp
