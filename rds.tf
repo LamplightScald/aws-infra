@@ -49,6 +49,10 @@ resource "aws_db_instance" "rds" {
   vpc_security_group_ids = [aws_security_group.database.id]
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.name
   multi_az               = false
+
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.kms_rds.arn
+
   tags = {
     Name = "my-rds-instance"
   }
