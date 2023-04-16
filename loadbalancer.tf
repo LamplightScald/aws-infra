@@ -24,46 +24,6 @@ resource "aws_security_group" "loadBalancer" {
   }
 }
 
-
-# resource "aws_launch_configuration" "autoLauchConfig" {
-#   name_prefix     = "autoLauchConfig-"
-#   image_id        = data.aws_ami.latest_ami.id
-#   associate_public_ip_address = true
-#   instance_type   = "t2.micro"
-#   security_groups = [aws_security_group.application.id]
-#   user_data       = <<EOF
-#     #!/bin/bash
-#     cd /home/ec2-user/webapp
-#     echo "DB_HOST=${aws_db_instance.rds.address}" >> .env
-#     echo "S3_BUCKET_NAME=${aws_s3_bucket.new_bucket.bucket}" >> .env
-#     mkdir /product_image_uploads
-#     sudo chmod 777 -R /home/ec2-user/webapp/product_image_uploads
-#     sudo chmod 777 -R /var/log
-
-#     sudo cp ./cloudwatch-config.json /opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-config.json
-#     sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-config.json -s
-
-#     NODE_ENV=.env node app.js
-
-#     sudo systemctl daemon-reload
-#     sudo systemctl restart setup_systemd
-#     sudo systemctl status setup_systemd
-#     sudo systemctl enable setup_systemd
-#   EOF
-
-#   #   block_device_mappings {
-#   #   device_name = "/dev/xvda"
-#   #   ebs {
-#   #     volume_size = 20
-#   #     volume_type = "gp2"
-#   #     delete_on_termination = true
-#   #   }
-#   # }
-#   root_block_device {
-#     volume_size = 20
-#   }
-# }
-
 resource "aws_launch_template" "autoLaunchTemplate" {
   name_prefix   = "autoLaunchTemplate-"
   image_id      = data.aws_ami.latest_ami.id
